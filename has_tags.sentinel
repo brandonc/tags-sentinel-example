@@ -1,0 +1,21 @@
+# Imports mock data
+import "tfrun" as tfrun
+
+# Mandatory Instance Tags
+mandatory_tags = [
+    "owner",
+]
+
+# Rule to enforce "Name" tag on all instances
+workspace_has_owner_tag = rule {
+  all mandatory_tags as mt {
+    any tfrun.workspace.tag_bindings as tb {
+      tb.key is mt
+    }
+  }
+}
+
+# Main rule that requires other rules to be true
+main = rule {
+  workspace_has_owner_tag
+}
